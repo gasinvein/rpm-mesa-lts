@@ -1,0 +1,11 @@
+diff -up mesa-21.3.9/src/gallium/drivers/crocus/crocus_query.c.dma mesa-21.3.9/src/gallium/drivers/crocus/crocus_query.c
+--- mesa-21.3.9/src/gallium/drivers/crocus/crocus_query.c.dma	2022-08-05 07:14:53.047132940 +1000
++++ mesa-21.3.9/src/gallium/drivers/crocus/crocus_query.c	2022-08-05 07:15:25.843585420 +1000
+@@ -516,6 +516,7 @@ crocus_destroy_query(struct pipe_context
+       crocus_syncobj_reference(screen, &query->syncobj, NULL);
+       screen->base.fence_reference(ctx->screen, &query->fence, NULL);
+    }
++   pipe_resource_reference(&query->query_state_ref.res, NULL);
+    free(query);
+ }
+ 

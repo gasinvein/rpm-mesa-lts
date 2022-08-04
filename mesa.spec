@@ -79,6 +79,8 @@ Patch0006: 0004-Revert-nouveau-no-modifier-the-invalid-modifier.patch
 Patch0007: 0005-Revert-nouveau-Use-DRM_FORMAT_MOD_NVIDIA_BLOCK_LINEA.patch
 Patch0008: 0006-Revert-nouveau-Stash-supported-sector-layout-in-scre.patch
 
+Patch0010: crocus-leak-query-fix.patch
+
 BuildRequires:  meson >= 0.45
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
