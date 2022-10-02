@@ -2,7 +2,7 @@
 %global with_hardware 1
 %global with_vulkan_hw 1
 %global with_vdpau 1
-%global with_vaapi 1
+%global with_va 1
 %if !0%{?rhel}
 %global with_nine 1
 %global with_omx 1
@@ -125,7 +125,7 @@ BuildRequires:  flex
 %if 0%{?with_vdpau}
 BuildRequires:  pkgconfig(vdpau) >= 1.1
 %endif
-%if 0%{?with_vaapi}
+%if 0%{?with_va}
 BuildRequires:  pkgconfig(libva) >= 0.38.0
 %endif
 %if 0%{?with_omx}
@@ -223,12 +223,13 @@ Requires:       %{name}-filesystem%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{rel
 %{summary}.
 %endif
 
-%if 0%{?with_vaapi}
-%package        vaapi-drivers
-Summary:        Mesa-based VAAPI drivers
+%if 0%{?with_va}
+%package        va-drivers
+Summary:        Mesa-based VA-API video acceleration drivers
 Requires:       %{name}-filesystem%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      %{name}-vaapi-drivers < 22.2.0-5
 
-%description vaapi-drivers
+%description va-drivers
 %{summary}.
 %endif
 
@@ -373,7 +374,7 @@ export CXXFLAGS="%{optflags} $EXTRA_CXXFLAGS"
   -Dgallium-vdpau=%{?with_vdpau:enabled}%{!?with_vdpau:disabled} \
   -Dgallium-xvmc=disabled \
   -Dgallium-omx=%{?with_omx:bellagio}%{!?with_omx:disabled} \
-  -Dgallium-va=%{?with_vaapi:enabled}%{!?with_vaapi:disabled} \
+  -Dgallium-va=%{?with_va:enabled}%{!?with_va:disabled} \
   -Dgallium-xa=%{?with_xa:enabled}%{!?with_xa:disabled} \
   -Dgallium-nine=%{?with_nine:true}%{!?with_nine:false} \
   -Dgallium-opencl=%{?with_opencl:icd}%{!?with_opencl:disabled} \
@@ -598,8 +599,8 @@ popd
 %{_libdir}/bellagio/libomx_mesa.so
 %endif
 
-%if 0%{?with_vaapi}
-%files vaapi-drivers
+%if 0%{?with_va}
+%files va-drivers
 %{_libdir}/dri/nouveau_drv_video.so
 %if 0%{?with_r600}
 %{_libdir}/dri/r600_drv_video.so
