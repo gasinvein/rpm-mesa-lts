@@ -55,6 +55,8 @@
 %endif
 %global vulkan_drivers swrast%{?base_vulkan}%{?platform_vulkan}
 
+%global llvm_version 14
+
 Name:           mesa
 Summary:        Mesa graphics libraries
 %global ver 21.3.9
@@ -131,9 +133,17 @@ BuildRequires:  pkgconfig(libomxil-bellagio)
 %endif
 BuildRequires:  pkgconfig(libelf)
 BuildRequires:  pkgconfig(libglvnd) >= 1.3.2
+%if 0%{?fedora} > 35
+BuildRequires:  llvm%{llvm_version}-devel
+%else
 BuildRequires:  llvm-devel >= 7.0.0
+%endif
 %if 0%{?with_opencl}
+%if 0%{?fedora} > 35
+BuildRequires:  clang%{llvm_version}-devel
+%else
 BuildRequires:  clang-devel
+%endif
 BuildRequires:  pkgconfig(libclc)
 %endif
 %if %{with valgrind}
@@ -338,6 +348,12 @@ cp %{SOURCE1} docs/
 # https://bugzilla.redhat.com/show_bug.cgi?id=1862771 for details.
 # Disable LTO for now
 %define _lto_cflags %{nil}
+
+EXTRA_CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=int-conversion"
+EXTRA_CXXFLAGS="$EXTRA_CFLAGS"
+
+export CFLAGS="%{optflags} $EXTRA_CFLAGS"
+export CXXFLAGS="%{optflags} $EXTRA_CXXFLAGS"
 
 %meson \
   -Dplatforms=x11,wayland \
